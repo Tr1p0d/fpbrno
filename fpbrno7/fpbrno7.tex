@@ -1,0 +1,234 @@
+\documentclass[11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{filecontents}
+\usepackage{pgfplots}
+\usepackage{listings}
+
+\usetheme{default}
+
+\lstset{
+	frame=none,
+	xleftmargin=2pt,
+	stepnumber=1,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\ttfamily\tiny\color[gray]{0.3},
+	belowcaptionskip=\bigskipamount,
+	captionpos=b,
+	escapeinside={*'}{'*},
+	language=haskell,
+	tabsize=2,
+	emphstyle={\bf},
+	commentstyle=\it,
+	stringstyle=\mdseries\rmfamily,
+	showspaces=false,
+	keywordstyle=\bfseries\rmfamily,
+	columns=flexible,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	morecomment=[l]\%,
+}
+
+\author{Marek Kido\v{n}}
+\title{Purely functional programming}
+	\subtitle{There is no turning back}
+	%\logo{}
+	%\institute{}
+\date{\today}
+	%\subject{}
+	%\setbeamercovered{transparent}
+	%\setbeamertemplate{navigation symbols}{}
+
+\begin{document}	
+	\begin{frame}[plain]
+		\titlepage
+%		\addtocounter{framenumber}{-1}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{What is purely functional programming}
+			\begin{block}{Functional}
+				\begin{itemize}[<+->]
+					\item Style of  building the structure of computer programs
+					\item Declarative: the job is done using expressions(declarations), not statements
+					\item Build up functions from expressions
+					\item Function output depends on inputs only
+				\end{itemize}
+			\end{block}
+		
+			\begin{block}{Purely functional}
+				\begin{itemize}[<+->]
+					\item Controversy: a lot of things to a lot of people
+					\item How do you handle computational side effects?
+					\item Treatment of computational effects is the key
+				\end{itemize}
+			\end{block}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Types: Motivation}
+			\begin{itemize}[<+->]
+				\item Mars Climate Orbiter disintegrated during trajectory correction in 1999.
+				\item Cause: Software provided by Lockheed Martin calculated in pound-seconds. NASA expected newton-seconds. Cost: \$125 million.
+				\item Ariane 5 was destructed by engineers shortly after launch.
+				\item Cause: Computers tried to cram 64bit number into 16bit space. Cost: \$500 million worth of the carried satellite.
+				\item Some dude's website kicked a bucket.
+				\item Cause: An obscure function expected a capitalized string but received a lowercase one. Cost: a really bad day for some dude and his employer.
+				\item Every day a lot of money is wasted on bugs, their consequences and their fixing (which often introduces new bugs...).
+			\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Types: What are they?}
+		\begin{itemize}[<+->]
+			\item Types and static type systems are programmers best friend!
+			\item Controversy: a lot of things to a lot of people. 
+			\item Definition: Syntactic? Representational? Behavioral? Value space definition?
+			\item Common sense: Type is uniquely defined by the set of its values. Think of integers, characters, tuples, lists, etc...
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Types: The epic fail...}
+			\begin{itemize}[<+->]
+				\item How do you define a new type in most programming languages?
+				\item Are data structures or objects the solution?
+				\item Question: How do you represent the Logic = \{True, False, Unknown, Uninitialized, \ldots \} type used in hardware related applications?
+				\item Answer: You can't really... (or use language with such type built in)
+				\item Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
+			\end{itemize}
+	\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Types: Example 1}
+\begin{lstlisting}
+#define TRUE 0
+#define FALSE 1
+#define UNKNOWN 2
+#define UNINITIALIZED 3
+typedef unsigned int STD_LOGIC;
+void launchViciousRocket(STD_LOGIC);
+
+int main(void) {
+	STD_LOGIC signalValue;
+
+	signalValue = UNKNOWN;
+	signalValue = 0xdeadbeef;
+
+	launchViciousRocket(signalValue);
+	
+	return 0;
+}
+\end{lstlisting}
+
+\begin{itemize}[<+->]
+	\item Question: will be the vicious rocket launched?
+	\item Answer: Who knows...
+\end{itemize}
+\end{frame}
+
+	\begin{frame}
+		\frametitle{Types: The purely functional approach}
+			\begin{itemize}[<+->]
+				\item You can create new types as labels for their sets of values.
+				\item An instance of a type is created by a creating to a certain value in its set.
+				\item Pattern matching: as opposed to creating, you have a way to dismantle it.
+			\end{itemize}
+	\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Types: Example 2}
+\begin{lstlisting}[language=haskell]
+launchViciousRocket 
+    :: StdLogic 
+    -> PossiblyKillMillionsOfPeople
+
+data StdLogic
+    = TRUE
+    | FALSE
+    | Unknown
+    | Uninitialized
+	
+main = 
+    let signalValue = 0xdeadbeef 
+    in launchViciousRocket(signalValue)		
+\end{lstlisting}
+\begin{itemize}[<+->]
+	\item Question: will be the vicious rocket launched?
+	\item Answer: No, such program will never compile.
+\end{itemize}		
+\end{frame}
+
+\begin{frame}
+	\frametitle{Types: The lesson}
+	\begin{itemize}[<+->]
+		\item Computer program's semantics can be implemented in types.
+		\item Type correctness can be checked at compile time!
+		\item Sadly you can't create new types in most programming languages.
+		\item You rely on run-time checks instead of compile-time type checker.
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Vision case study}
+	\begin{block}{Task}
+		\begin{itemize}[<+->]
+			\item Write an automated quality control system for Hyundai.
+			\item You have less than 2 months for it.
+			\item Two people project.
+			\item Customer has to sign an acceptation protocol.
+		\end{itemize}
+	\end{block}
+	\begin{block}{Result}
+		\begin{itemize}[<+->]
+			\item 10000 lines of code in Haskell
+			\item Few hundreds lines of C++/openCV using functional techniques.
+			\item Not a single unit test
+			\item Some functional tests
+			\item Acceptation protocol signed
+			\item Still waiting for first bug report
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{PFP: Programmers mindset}		
+	\begin{itemize}[<+->]
+		\item Problem: People do make mistakes. 
+		\item Solution: Computers do not. Transfer as much work on a computer as possible.
+		\item Problem: People hate to writing boilerplate code. It is repetitious, boring and error prone.
+		\item Solution: Use as many abstract constructs as possible. Do not write boilerplate code. Good compiler can generate it for you.
+		\item Problem?: People are lazy.
+		\item Solution: Be lazy to type. \textit{Do not be lazy to think}. Encode semantics in types whenever it is beneficial. Let the compiler do your work.
+	\end{itemize}
+\end{frame}
+
+\begin{frame} 
+	\frametitle{PFP: What does it bring to a company}		
+	\begin{itemize}[<+->]
+		\item Imagine you will do the next project in Haskell...
+		\item What are the consequences?
+		\item You get smart and creative people by definition(previous slide).
+		\item What is their motivation?
+		\item Your software is more likely to be less buggy
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{PFP: There is no turning back}
+	\begin{itemize}[<+->]
+		\item Do not fear the purely functional platforms. They are often the \textit{final frontier} of programming techniques.
+		\item Imagine you decide to learn purely functional programming incorporating strong static typing.
+		\item Problem: \textit{there is no turning back}
+		\item Cause: You get lazy beyond belief
+		\item Solution: its not really a problem is it?
+	\end{itemize}
+\end{frame}
+\end{document}
