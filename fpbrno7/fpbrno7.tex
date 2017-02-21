@@ -13,29 +13,6 @@
 
 \usetheme{default}
 
-\lstset{
-	frame=none,
-	xleftmargin=2pt,
-	stepnumber=1,
-	numbers=left,
-	numbersep=5pt,
-	numberstyle=\ttfamily\tiny\color[gray]{0.3},
-	belowcaptionskip=\bigskipamount,
-	captionpos=b,
-	escapeinside={*'}{'*},
-	language=haskell,
-	tabsize=2,
-	emphstyle={\bf},
-	commentstyle=\it,
-	stringstyle=\mdseries\rmfamily,
-	showspaces=false,
-	keywordstyle=\bfseries\rmfamily,
-	columns=flexible,
-	basicstyle=\footnotesize\ttfamily,
-	showstringspaces=false,
-	morecomment=[l]\%,
-}
-
 \author{Marek Kido\v{n}}
 \title{Purely functional programming}
 	\subtitle{There is no turning back}
@@ -54,23 +31,36 @@
 
 	\begin{frame}
 		\frametitle{What is purely functional programming}
+			\only<1>{
 			\begin{block}{Functional}
-				\begin{itemize}[<+->]
+				\begin{itemize}
 					\item Style of  building the structure of computer programs
 					\item Declarative: the job is done using expressions(declarations), not statements
 					\item Build up functions from expressions
 					\item Function output depends on inputs only
 				\end{itemize}
 			\end{block}
-		
+			}
+			\only<2>{
 			\begin{block}{Purely functional}
-				\begin{itemize}[<+->]
+				\begin{itemize}
 					\item Controversy: a lot of things to a lot of people
 					\item How do you handle computational side effects?
 					\item Treatment of computational effects is the key
 				\end{itemize}
 			\end{block}
+			}
 	\end{frame}
+		
+\begin{frame}
+	\frametitle{Where do purely functional languages excel}
+	\begin{itemize}[<+->]
+		\item Very expressive
+		\item Highly polymorphic
+		\item Parallelism and concurrency
+		\item Strong static typing
+	\end{itemize}
+\end{frame}
 
 	\begin{frame}
 		\frametitle{Types: Motivation}
@@ -85,29 +75,54 @@
 			\end{itemize}
 	\end{frame}
 
-	\begin{frame}
-		\frametitle{Types: What are they?}
-		\begin{itemize}[<+->]
-			\item Types and static type systems are programmers best friend!
-			\item Controversy: a lot of things to a lot of people. 
-			\item Definition: Syntactic? Representational? Behavioral? Value space definition?
-			\item Common sense: Type is uniquely defined by the set of its values. Think of integers, characters, tuples, lists, etc...
-		\end{itemize}
-	\end{frame}
+\begin{frame}[fragile]
+	\frametitle{Types: What are they?}
+	\begin{itemize}[<+->]
+		\item Types and static type systems are programmers best friend!
+		\item Controversy: a lot of things to a lot of people. 
+		\item Definition: Syntactic? Representational? Behavioral? Value space definition?
+		\item Common sense: Type is uniquely defined by the set of its values. Think of integers, characters, tuples, lists, etc...
+	\end{itemize}
+\lstset
+{ language=Haskell
+	, basicstyle=\ttfamily\footnotesize
+	, keywordstyle=\color{blue}\ttfamily
+	, stringstyle=\color{red}\ttfamily
+	, commentstyle=\color{green}\ttfamily
+	, morecomment=[l][\color{magenta}]{\#}
+	, frame=single
+}
+\begin{lstlisting}
+  Word32 = 0 | 1 | 2 | 3 | ... | 4294967295
+  SymbolTuple = ('a','a') | ('a','b') | ... | ('z','z')
+\end{lstlisting}	
+\end{frame}
 
 	\begin{frame}
 		\frametitle{Types: The epic fail...}
 			\begin{itemize}[<+->]
 				\item How do you define a new type in most programming languages?
-				\item Are data structures or objects the solution?
 				\item Question: How do you represent the Logic = \{True, False, Unknown, Uninitialized, \ldots \} type used in hardware related applications?
-				\item Answer: You can't really... (or use language with such type built in)
-				\item Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
+				\item Question: Are data structures or objects the solution?
+				\item Question: Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
+				\item Answer: It depends...
+				\item Common practice is to map type semantics into a structure of existing types.
 			\end{itemize}
 	\end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Types: Example 1}
+
+\lstset
+	{ language=C
+	, basicstyle=\ttfamily\footnotesize
+	, keywordstyle=\color{blue}\ttfamily
+	, stringstyle=\color{red}\ttfamily
+	, commentstyle=\color{green}\ttfamily
+	, morecomment=[l][\color{magenta}]{\#}
+	, frame=single
+}
+
 \begin{lstlisting}
 #define TRUE 0
 #define FALSE 1
@@ -138,14 +153,24 @@ int main(void) {
 		\frametitle{Types: The purely functional approach}
 			\begin{itemize}[<+->]
 				\item You can create new types as labels for their sets of values.
-				\item An instance of a type is created by a creating to a certain value in its set.
+				\item A value of a certain type is instantiated by picking a member from its set.
 				\item Pattern matching: as opposed to creating, you have a way to dismantle it.
+				\item If you do not match all member of the type compiler will complain.
 			\end{itemize}
 	\end{frame}
 
 \begin{frame}[fragile]
-	\frametitle{Types: Example 2}
-\begin{lstlisting}[language=haskell]
+\frametitle{Types: Example 2}
+\lstset
+{ language=Haskell
+	, basicstyle=\ttfamily\footnotesize
+	, keywordstyle=\color{blue}\ttfamily
+	, stringstyle=\color{red}\ttfamily
+	, commentstyle=\color{green}\ttfamily
+	, morecomment=[l][\color{magenta}]{\#}
+	, frame=single
+}
+\begin{lstlisting}
 launchViciousRocket 
     :: StdLogic 
     -> PossiblyKillMillionsOfPeople
@@ -199,10 +224,10 @@ main =
 \end{frame}
 
 \begin{frame}
-	\frametitle{PFP: Programmers mindset}		
+	\frametitle{PFP: Programmer's mindset}		
 	\begin{itemize}[<+->]
 		\item Problem: People do make mistakes. 
-		\item Solution: Computers do not. Transfer as much work on a computer as possible.
+		\item Solution: Computers do not.
 		\item Problem: People hate to writing boilerplate code. It is repetitious, boring and error prone.
 		\item Solution: Use as many abstract constructs as possible. Do not write boilerplate code. Good compiler can generate it for you.
 		\item Problem?: People are lazy.
