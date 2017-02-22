@@ -31,19 +31,19 @@
 
 	\begin{frame}
 		\frametitle{What is purely functional programming}
-			\only<1>{
+			\only<1->{
 			\begin{block}{Functional}
-				\begin{itemize}
-					\item Style of  building the structure of computer programs
+				\begin{itemize}[<+->]
+					\item Style of building the structure of computer programs
 					\item Declarative: the job is done using expressions(declarations), not statements
 					\item Build up functions from expressions
 					\item Function output depends on inputs only
 				\end{itemize}
 			\end{block}
 			}
-			\only<2>{
+			\only<5->{
 			\begin{block}{Purely functional}
-				\begin{itemize}
+				\begin{itemize}[<+->]
 					\item Controversy: a lot of things to a lot of people
 					\item How do you handle computational side effects?
 					\item Treatment of computational effects is the key
@@ -92,9 +92,10 @@
 	, morecomment=[l][\color{magenta}]{\#}
 	, frame=single
 }
+\pause
 \begin{lstlisting}
   Word32 = 0 | 1 | 2 | 3 | ... | 4294967295
-  SymbolTuple = ('a','a') | ('a','b') | ... | ('z','z')
+  SymbolTuple =  AA ('a','a') | ... | ZZ ('z','z')
 \end{lstlisting}	
 \end{frame}
 
@@ -102,9 +103,9 @@
 		\frametitle{Types: The epic fail...}
 			\begin{itemize}[<+->]
 				\item How do you define a new type in most programming languages?
-				\item Question: How do you represent the Logic = \{True, False, Unknown, Uninitialized, \ldots \} type used in hardware related applications?
-				\item Question: Are data structures or objects the solution?
-				\item Question: Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
+				\item How do you represent the Logic = \{True, False, Unknown, Uninitialized, \ldots \} type used in hardware related applications?
+				\item Are data structures or objects the solution?
+				\item Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
 				\item Answer: It depends...
 				\item Common practice is to map type semantics into a structure of existing types.
 			\end{itemize}
@@ -149,18 +150,57 @@ int main(void) {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]
+	\frametitle{Types: Example 2}
+	
+	\lstset
+	{ language=C
+		, basicstyle=\ttfamily\footnotesize
+		, keywordstyle=\color{blue}\ttfamily
+		, stringstyle=\color{red}\ttfamily
+		, commentstyle=\color{green}\ttfamily
+		, morecomment=[l][\color{magenta}]{\#}
+		, frame=single
+	}
+	
+\begin{lstlisting}
+void launchViciousRocket(STD_LOGIC signal) {
+    switch(expression) {
+        case TRUE :
+            killMillionsOfPeople();
+            break;
+	
+        case FALSE :
+            doNotKillMillionsofPeople();
+            break;
+	
+        case UNKNOWN :
+            newSignal = flipACoin();
+    	    launchViciousRocket(newSignal);
+    	    break;
+    }
+    restOfTheStatements();
+}
+\end{lstlisting}
+	
+\begin{itemize}[<+->]
+	\item Question: will be the vicious rocket launched?
+	\item Answer: Who knows...
+\end{itemize}
+\end{frame}
+
 	\begin{frame}
 		\frametitle{Types: The purely functional approach}
 			\begin{itemize}[<+->]
-				\item You can create new types as labels for their sets of values.
-				\item A value of a certain type is instantiated by picking a member from its set.
-				\item Pattern matching: as opposed to creating, you have a way to dismantle it.
-				\item If you do not match all member of the type compiler will complain.
+				\item You can create new types as labels for their sets of values
+				\item A value of a certain type is instantiated by picking a member from its set
+				\item Pattern matching: as opposed to creating, you have a way to dismantle it
+				\item If you do not match on all members of the type compiler may complain
 			\end{itemize}
 	\end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Types: Example 2}
+\frametitle{Types: Example 3}
 \lstset
 { language=Haskell
 	, basicstyle=\ttfamily\footnotesize
@@ -187,14 +227,43 @@ main =
 \end{lstlisting}
 \begin{itemize}[<+->]
 	\item Question: will be the vicious rocket launched?
-	\item Answer: No, such program will never compile.
+	\item Answer: No, such program will never compile
 \end{itemize}		
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Types: Example 4}
+\lstset
+{ language=Haskell
+	, basicstyle=\ttfamily\footnotesize
+	, keywordstyle=\color{blue}\ttfamily
+	, stringstyle=\color{red}\ttfamily
+	, commentstyle=\color{green}\ttfamily
+	, morecomment=[l][\color{magenta}]{\#}
+	, frame=single
+}
+
+\begin{lstlisting}{language=haskell}
+launchViciousRocket 
+    :: StdLogic 
+    -> PossiblyKillMillionsOfPeople
+
+launchViciousRocket signal = case signal of
+    TRUE -> killMillionsOfPeople
+    FALSE -> doNotKillMillionsofPeople
+    Unknown -> withFlipACoin launchViciousRocket
+    // Uninitialized -> 
+\end{lstlisting}	
+\begin{itemize}[<+->]
+	\item Question: Will be the vicious rocket launched?
+	\item Answer: Who knows...
+\end{itemize}	
 \end{frame}
 
 \begin{frame}
 	\frametitle{Types: The lesson}
 	\begin{itemize}[<+->]
-		\item Computer program's semantics can be implemented in types.
+		\item Computer program semantics can be implemented in types.
 		\item Type correctness can be checked at compile time!
 		\item Sadly you can't create new types in most programming languages.
 		\item You rely on run-time checks instead of compile-time type checker.
@@ -203,6 +272,7 @@ main =
 
 \begin{frame}
 	\frametitle{The Vision case study}
+	\only<1-> {
 	\begin{block}{Task}
 		\begin{itemize}[<+->]
 			\item Write an automated quality control system for Hyundai.
@@ -211,16 +281,19 @@ main =
 			\item Customer has to sign an acceptation protocol.
 		\end{itemize}
 	\end{block}
+    }
+	\only<5-> {
 	\begin{block}{Result}
 		\begin{itemize}[<+->]
-			\item 10000 lines of code in Haskell
+			\item 10000 loc of Haskell
 			\item Few hundreds lines of C++/openCV using functional techniques.
-			\item Not a single unit test
-			\item Some functional tests
-			\item Acceptation protocol signed
-			\item Still waiting for first bug report
+			\item Not a single unit test.
+			\item Some functional tests.
+			\item Acceptation protocol signed.
+			\item Still waiting for first bug report.
 		\end{itemize}
 	\end{block}
+    }
 \end{frame}
 
 \begin{frame}
@@ -228,7 +301,7 @@ main =
 	\begin{itemize}[<+->]
 		\item Problem: People do make mistakes. 
 		\item Solution: Computers do not.
-		\item Problem: People hate to writing boilerplate code. It is repetitious, boring and error prone.
+		\item Problem: People hate writing boilerplate code. It is repetitious, boring and error prone.
 		\item Solution: Use as many abstract constructs as possible. Do not write boilerplate code. Good compiler can generate it for you.
 		\item Problem?: People are lazy.
 		\item Solution: Be lazy to type. \textit{Do not be lazy to think}. Encode semantics in types whenever it is beneficial. Let the compiler do your work.
