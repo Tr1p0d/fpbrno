@@ -34,26 +34,25 @@
 			\only<1->{
 			\begin{block}{Functional}
 				\begin{itemize}[<+->]
-					\item Style of building the structure of computer programs
-					\item Declarative: the job is done using expressions(declarations), not statements
-					\item Build up functions from expressions
-					\item Function output depends on inputs only
+					\item Style of building the structure of computer programs.
+					\item Declarative: The job is done using expressions(declarations), not statements.
+					\item Function output depends on inputs only.
 				\end{itemize}
 			\end{block}
 			}
 			\only<5->{
 			\begin{block}{Purely functional}
 				\begin{itemize}[<+->]
-					\item Controversy: a lot of things to a lot of people
-					\item How do you handle computational side effects?
-					\item Treatment of computational effects is the key
+					\item Controversy: A lot of things to a lot of people.
+					\item How do you handle computational side effects purely?
+					\item Treatment of computational effects is the key.
 				\end{itemize}
 			\end{block}
 			}
 	\end{frame}
 		
 \begin{frame}
-	\frametitle{Where do purely functional languages excel}
+	\frametitle{Why do we like it}
 	\begin{itemize}[<+->]
 		\item Very expressive
 		\item Highly polymorphic
@@ -105,9 +104,8 @@
 				\item How do you define a new type in most programming languages?
 				\item How do you represent the Logic = \{True, False, Unknown, Uninitialized, \ldots \} type used in hardware related applications?
 				\item Are data structures or objects the solution?
-				\item Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
 				\item Answer: It depends...
-				\item Common practice is to map type semantics into a structure of existing types.
+				\item Common practice is to map type semantics into a structure of existing types. Are their sets of values isomorphic?
 			\end{itemize}
 	\end{frame}
 
@@ -145,7 +143,7 @@ int main(void) {
 \end{lstlisting}
 
 \begin{itemize}[<+->]
-	\item Question: will be the vicious rocket launched?
+	\item Question: Will the vicious be rocket launched?
 	\item Answer: Who knows...
 \end{itemize}
 \end{frame}
@@ -192,10 +190,10 @@ void launchViciousRocket(STD_LOGIC signal) {
 	\begin{frame}
 		\frametitle{Types: The purely functional approach}
 			\begin{itemize}[<+->]
-				\item You can create new types as labels for their sets of values
-				\item A value of a certain type is instantiated by picking a member from its set
-				\item Pattern matching: as opposed to creating, you have a way to dismantle it
-				\item If you do not match on all members of the type compiler may complain
+				\item You can create new types as labels for their sets of values.
+				\item A value of a certain type is instantiated by picking a member from its set.
+				\item Pattern matching: as opposed to creating, you have a way to dismantle it.
+				\item If you do not match on all members of the type compiler may complain.
 			\end{itemize}
 	\end{frame}
 
@@ -320,13 +318,40 @@ launchViciousRocket signal = case signal of
 \end{frame}
 
 \begin{frame}
+	\frametitle{The Vision case study}
+	\only<1-> {
+	    \begin{block}{Task}
+	    \begin{itemize}[<+->]
+	    	\item Write an automated quality control system for Hyundai.
+	    	\item You have less than 2 months for it.
+	    	\item Two people project.
+	    	\item Customer has to sign an acceptation protocol.
+	    \end{itemize}
+	    \end{block}
+   	}
+   	\only<5->{
+   	\begin{block}{Result}
+   		\begin{itemize}[<+->]
+   			\item Hardly 10000 loc of Haskell.
+   			\item Few hundreds of C++/openCV using functional techniques..
+   			\item Not a single unit test.
+   			\item Some functional tests
+   			\item Acceptation protocol signed.
+   			\item Still waiting for first bug report.
+   		\end{itemize}
+ 	 \end{block}
+	}
+\end{frame}
+
+\begin{frame}
 	\frametitle{PFP: There is no turning back}
 	\begin{itemize}[<+->]
 		\item Do not fear the purely functional platforms. They are often the \textit{final frontier} of programming techniques.
 		\item Imagine you decide to learn purely functional programming incorporating strong static typing.
-		\item Problem: \textit{there is no turning back}
+		\item Problem: \textit{There is no turning back}
 		\item Cause: You get lazy beyond belief
-		\item Solution: its not really a problem is it?
+		\item Solution: Its not really a problem is it?
 	\end{itemize}
 \end{frame}
+
 \end{document}
